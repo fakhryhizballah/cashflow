@@ -1,0 +1,147 @@
+<%- include('layout/header', { title: 'Kategori' }) %>
+<%- include('layout/navbar') %>
+
+<!-- Main Content -->
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-800">Manajemen Kategori</h1>
+            <p class="text-gray-600">Kelola kategori transaksi Anda</p>
+        </div>
+        <a href="/categories/create" class="mt-4 md:mt-0 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
+            <i class="fas fa-plus mr-2"></i>Kategori Baru
+        </a>
+    </div>
+
+    <!-- Categories by Type -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Income Categories -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="bg-gradient-to-r from-green-500 to-green-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fas fa-arrow-up mr-2"></i>Kategori Pemasukan
+                </h2>
+            </div>
+
+            <div class="p-6">
+                <% 
+                    const incomeCategories = (typeof categories !== 'undefined' && categories) 
+                        ? categories.filter(c => c.tipe === 'income') 
+                        : [];
+                %>
+                <% if (incomeCategories.length > 0) { %>
+                    <div class="space-y-3">
+                        <% incomeCategories.forEach(category => { %>
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-6 h-6 rounded" style="background-color: <%= category.warna %>; opacity: 0.7;"></div>
+                                    <span class="font-medium text-gray-800"><%= category.nama_kategori %></span>
+                                </div>
+                                <div class="space-x-2">
+                                    <a href="/categories/<%= category.id %>/edit" class="inline-block text-amber-600 hover:text-amber-700">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button onclick="deleteCategory(<%= category.id %>, '<%= category.nama_kategori %>')" class="inline-block text-red-600 hover:text-red-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-8">
+                        <i class="fas fa-inbox text-4xl text-gray-300 mb-2"></i>
+                        <p class="text-gray-500 mb-4">Belum ada kategori pemasukan</p>
+                        <a href="/categories/create?tipe=income" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+                            Buat kategori
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+
+        <!-- Expense Categories -->
+        <div class="bg-white rounded-lg shadow">
+            <div class="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
+                <h2 class="text-xl font-bold text-white">
+                    <i class="fas fa-arrow-down mr-2"></i>Kategori Pengeluaran
+                </h2>
+            </div>
+
+            <div class="p-6">
+                <% 
+                    const expenseCategories = (typeof categories !== 'undefined' && categories) 
+                        ? categories.filter(c => c.tipe === 'expense') 
+                        : [];
+                %>
+                <% if (expenseCategories.length > 0) { %>
+                    <div class="space-y-3">
+                        <% expenseCategories.forEach(category => { %>
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-6 h-6 rounded" style="background-color: <%= category.warna %>; opacity: 0.7;"></div>
+                                    <span class="font-medium text-gray-800"><%= category.nama_kategori %></span>
+                                </div>
+                                <div class="space-x-2">
+                                    <a href="/categories/<%= category.id %>/edit" class="inline-block text-amber-600 hover:text-amber-700">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <button onclick="deleteCategory(<%= category.id %>, '<%= category.nama_kategori %>')" class="inline-block text-red-600 hover:text-red-700">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        <% }); %>
+                    </div>
+                <% } else { %>
+                    <div class="text-center py-8">
+                        <i class="fas fa-inbox text-4xl text-gray-300 mb-2"></i>
+                        <p class="text-gray-500 mb-4">Belum ada kategori pengeluaran</p>
+                        <a href="/categories/create?tipe=expense" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">
+                            Buat kategori
+                        </a>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white">Hapus Kategori</h2>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-700 mb-6">
+                Apakah Anda yakin ingin menghapus kategori <span id="categoryName" class="font-semibold"></span>? Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                    Batal
+                </button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                        Hapus
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function deleteCategory(id, name) {
+        document.getElementById('categoryName').textContent = name;
+        document.getElementById('deleteForm').action = '/categories/' + id + '/delete';
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+</script>
+
+<%- include('layout/footer') %>

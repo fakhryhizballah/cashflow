@@ -1,0 +1,212 @@
+<%- include('layout/header', { title: isEdit ? 'Edit Transaksi' : 'Buat Transaksi' }) %>
+<%- include('layout/navbar') %>
+
+<!-- Main Content -->
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-800">
+            <% if (isEdit) { %>
+                Edit Transaksi
+            <% } else { %>
+                Buat Transaksi Baru
+            <% } %>
+        </h1>
+        <p class="text-gray-600">
+            <% if (isEdit) { %>
+                Ubah data transaksi
+            <% } else { %>
+                Catat pemasukan atau pengeluaran keuangan Anda
+            <% } %>
+        </p>
+    </div>
+
+    <!-- Form Card -->
+    <div class="bg-white rounded-lg shadow p-8 max-w-2xl mx-auto">
+        <!-- Error Alert -->
+        <% if (typeof errors !== 'undefined' && errors && errors.length > 0) { %>
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                <p class="text-red-600 text-sm font-medium mb-2"><i class="fas fa-exclamation-circle mr-2"></i>Terjadi Kesalahan</p>
+                <% errors.forEach(error => { %>
+                    <p class="text-red-500 text-xs">• <%= error.message %></p>
+                <% }); %>
+            </div>
+        <% } %>
+
+        <form method="POST" action="<% if (isEdit) { %>/transactions/<%= transaction.id %>/update<% } else { %>/transactions/create<% } %>" class="space-y-6">
+            <!-- Tipe Transaksi -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Tipe Transaksi</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <label class="flex items-center p-4 border-2 rounded-lg cursor-pointer transition" id="income-label">
+                        <input type="radio" name="tipe" value="income" 
+                            <%= (isEdit && transaction.tipe === 'income' || !isEdit && query.tipe === 'income') ? 'checked' : '' %>
+                            class="form-radio" onchange="updateForm()">
+                        <span class="ml-3 flex items-center">
+                            <i class="fas fa-arrow-up text-green-600 mr-2"></i>
+                            <span class="font-medium">Pemasukan</span>
+                        </span>
+                    </label>
+                    <label class="flex items-center p-4 border-2 rounded-lg cursor-pointer transition" id="expense-label">
+                        <input type="radio" name="tipe" value="expense" 
+                            <%= (isEdit && transaction.tipe === 'expense' || !isEdit && query.tipe === 'expense') ? 'checked' : '' %>
+                            class="form-radio" onchange="updateForm()">
+                        <span class="ml-3 flex items-center">
+                            <i class="fas fa-arrow-down text-red-600 mr-2"></i>
+                            <span class="font-medium">Pengeluaran</span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Aset -->
+            <div>
+                <label for="asset_id" class="block text-sm font-medium text-gray-700 mb-2">Aset</label>
+                <select id="asset_id" name="asset_id" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <option value="">Pilih Aset</option>
+                    <% if (typeof assets !== 'undefined' && assets) { %>
+                        <% assets.forEach(asset => { %>
+                            <option value="<%= asset.id %>" <%= (isEdit && transaction.asset_id === asset.id) || (!isEdit && query.asset_id == asset.id) ? 'selected' : '' %>>
+                                <%= asset.nama_aset %> - <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(asset.saldo) %>
+                            </option>
+                        <% }); %>
+                    <% } %>
+                </select>
+            </div>
+
+            <!-- Kategori -->
+            <div>
+                <label for="category_id" class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+                <select id="category_id" name="category_id" required
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <option value="">Pilih Kategori</option>
+                    <% if (typeof categories !== 'undefined' && categories) { %>
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category.id %>" <%= (isEdit && transaction.category_id === category.id) ? 'selected' : '' %>>
+                                <%= category.nama_kategori %>
+                            </option>
+                        <% }); %>
+                    <% } %>
+                </select>
+            </div>
+
+            <!-- Tanggal -->
+            <div>
+                <label for="tanggal" class="block text-sm font-medium text-gray-700 mb-2">Tanggal</label>
+                <input type="date" id="tanggal" name="tanggal" required
+                    value="<% if (isEdit) { %><%= transaction.tanggal.toISOString().split('T')[0] %><% } %>"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+            </div>
+
+            <!-- Jumlah -->
+            <div>
+                <label for="jumlah" class="block text-sm font-medium text-gray-700 mb-2">Jumlah</label>
+                <div class="relative">
+                    <span class="absolute left-4 top-2 text-gray-500 text-sm font-medium">Rp</span>
+                    <input type="number" id="jumlah" name="jumlah" required min="0" step="1000"
+                        value="<% if (isEdit) { %><%= transaction.jumlah %><% } %>"
+                        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                        placeholder="0">
+                </div>
+            </div>
+
+            <!-- Catatan -->
+            <div>
+                <label for="catatan" class="block text-sm font-medium text-gray-700 mb-2">Catatan</label>
+                <textarea id="catatan" name="catatan" rows="4"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none"
+                    placeholder="Tambahkan catatan untuk transaksi ini"><% if (isEdit) { %><%= transaction.catatan || '' %><% } %></textarea>
+            </div>
+
+            <!-- Recurring -->
+            <div>
+                <label class="flex items-center">
+                    <input type="checkbox" id="is_recurring" name="is_recurring" 
+                        <%= (isEdit && transaction.is_recurring) ? 'checked' : '' %> 
+                        class="form-checkbox" onchange="toggleRecurring()">
+                    <span class="ml-2 text-sm font-medium text-gray-700">Transaksi Berulang</span>
+                </label>
+            </div>
+
+            <!-- Recurring Type (Conditional) -->
+            <div id="recurring-type-container" class="hidden">
+                <label for="recurring_type" class="block text-sm font-medium text-gray-700 mb-2">Tipe Pengulangan</label>
+                <select id="recurring_type" name="recurring_type"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <option value="">Pilih Tipe</option>
+                    <option value="daily" <%= (isEdit && transaction.recurring_type === 'daily') ? 'selected' : '' %>>Harian</option>
+                    <option value="weekly" <%= (isEdit && transaction.recurring_type === 'weekly') ? 'selected' : '' %>>Mingguan</option>
+                    <option value="monthly" <%= (isEdit && transaction.recurring_type === 'monthly') ? 'selected' : '' %>>Bulanan</option>
+                    <option value="yearly" <%= (isEdit && transaction.recurring_type === 'yearly') ? 'selected' : '' %>>Tahunan</option>
+                </select>
+            </div>
+
+            <!-- Bookmark -->
+            <div>
+                <label class="flex items-center">
+                    <input type="checkbox" id="is_bookmarked" name="is_bookmarked" 
+                        <%= (isEdit && transaction.is_bookmarked) ? 'checked' : '' %> 
+                        class="form-checkbox">
+                    <span class="ml-2 text-sm font-medium text-gray-700">
+                        <i class="fas fa-bookmark mr-1"></i>Tandai sebagai Favorit
+                    </span>
+                </label>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-end space-x-4 pt-6 border-t">
+                <a href="/transactions" class="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 font-medium transition">
+                    Batal
+                </a>
+                <button type="submit" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
+                    <% if (isEdit) { %>
+                        <i class="fas fa-save mr-2"></i>Simpan Perubahan
+                    <% } else { %>
+                        <i class="fas fa-plus mr-2"></i>Buat Transaksi
+                    <% } %>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function toggleRecurring() {
+        const isRecurring = document.getElementById('is_recurring').checked;
+        const recurringContainer = document.getElementById('recurring-type-container');
+        if (isRecurring) {
+            recurringContainer.classList.remove('hidden');
+        } else {
+            recurringContainer.classList.add('hidden');
+        }
+    }
+
+    function updateForm() {
+        const tipe = document.querySelector('input[name="tipe"]:checked').value;
+        const incomeLabel = document.getElementById('income-label');
+        const expenseLabel = document.getElementById('expense-label');
+        
+        if (tipe === 'income') {
+            incomeLabel.classList.add('border-green-500', 'bg-green-50');
+            incomeLabel.classList.remove('border-gray-300');
+            expenseLabel.classList.remove('border-red-500', 'bg-red-50');
+            expenseLabel.classList.add('border-gray-300');
+        } else {
+            expenseLabel.classList.add('border-red-500', 'bg-red-50');
+            expenseLabel.classList.remove('border-gray-300');
+            incomeLabel.classList.remove('border-green-500', 'bg-green-50');
+            incomeLabel.classList.add('border-gray-300');
+        }
+    }
+
+    // Initialize on load
+    window.addEventListener('load', function() {
+        updateForm();
+        <% if (isEdit && transaction.is_recurring) { %>
+            toggleRecurring();
+        <% } %>
+    });
+</script>
+
+<%- include('layout/footer') %>

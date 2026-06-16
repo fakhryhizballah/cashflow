@@ -1,0 +1,179 @@
+<%- include('layout/header', { title: 'Selamat Datang' }) %>
+
+<!-- Navigation (Simple) -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="container mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <a href="/" class="text-2xl font-bold text-indigo-600">
+                <i class="fas fa-wallet mr-2"></i>CashFlow
+            </a>
+            <div class="flex items-center space-x-4">
+                <a href="/auth/login" class="text-gray-700 hover:text-indigo-600 font-medium">Login</a>
+                <a href="/auth/register" class="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
+                    Daftar
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-indigo-500 to-indigo-600 text-white py-20">
+    <div class="container mx-auto px-4 text-center">
+        <h1 class="text-5xl md:text-6xl font-bold mb-4">
+            Kelola Keuangan Anda dengan Mudah
+        </h1>
+        <p class="text-xl md:text-2xl mb-8 opacity-90">
+            Catat pemasukan dan pengeluaran, buat laporan, dan pahami pola keuangan Anda
+        </p>
+        <div class="flex flex-col md:flex-row justify-center gap-4">
+            <a href="/auth/register" class="px-8 py-3 bg-white text-indigo-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+                Mulai Sekarang
+            </a>
+            <a href="#features" class="px-8 py-3 bg-indigo-700 hover:bg-indigo-800 text-white rounded-lg font-semibold transition">
+                Pelajari Lebih Lanjut
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-20 bg-gray-50">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">Fitur Utama</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Feature 1 -->
+            <div class="bg-white rounded-lg shadow p-8 text-center hover:shadow-lg transition">
+                <div class="text-5xl text-indigo-600 mb-4"><i class="fas fa-plus-circle"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Mudah Dicatat</h3>
+                <p class="text-gray-600">
+                    Catat setiap transaksi dengan cepat dan mudah. Dukungan untuk berbagai tipe aset dan kategori.
+                </p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="bg-white rounded-lg shadow p-8 text-center hover:shadow-lg transition">
+                <div class="text-5xl text-green-600 mb-4"><i class="fas fa-chart-pie"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Laporan Lengkap</h3>
+                <p class="text-gray-600">
+                    Visualisasi keuangan Anda dengan laporan bulanan dan tahunan yang detail dan mudah dipahami.
+                </p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="bg-white rounded-lg shadow p-8 text-center hover:shadow-lg transition">
+                <div class="text-5xl text-blue-600 mb-4"><i class="fas fa-lock"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Aman & Terpercaya</h3>
+                <p class="text-gray-600">
+                    Data Anda dilindungi dengan enkripsi tingkat enterprise dan autentikasi yang kuat.
+                </p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="bg-white rounded-lg shadow p-8 text-center hover:shadow-lg transition">
+                <div class="text-5xl text-purple-600 mb-4"><i class="fas fa-mobile-alt"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Akses Dimana Saja</h3>
+                <p class="text-gray-600">
+                    Akses dari desktop, tablet, atau mobile. Responsif dan user-friendly di semua perangkat.
+                </p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="bg-white rounded-lg shadow p-8 text-center hover:shadow-lg transition">
+                <div class="text-5xl text-amber-600 mb-4"><i class="fas fa-wallet"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Multi Aset</h3>
+                <p class="text-gray-600">
+                    Kelola berbagai aset: bank, kartu debit, kartu kredit, dompet, dan investasi.
+                </p>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="bg-white rounded-lg shadow p-8 text-center hover:shadow-lg transition">
+                <div class="text-5xl text-red-600 mb-4"><i class="fas fa-repeat"></i></div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Transaksi Berulang</h3>
+                <p class="text-gray-600">
+                    Atur transaksi berulang untuk pengeluaran rutin seperti gaji, cicilan, atau langganan.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="py-20">
+    <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-16 text-gray-800">Cara Kerja</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="text-center">
+                <div class="bg-indigo-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">1</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Daftar Akun</h3>
+                <p class="text-gray-600">Buat akun baru dengan email dan password Anda</p>
+            </div>
+
+            <div class="text-center">
+                <div class="bg-indigo-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">2</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Buat Aset</h3>
+                <p class="text-gray-600">Tambahkan aset seperti rekening bank atau dompet</p>
+            </div>
+
+            <div class="text-center">
+                <div class="bg-indigo-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">3</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Catat Transaksi</h3>
+                <p class="text-gray-600">Mulai mencatat setiap pemasukan dan pengeluaran</p>
+            </div>
+
+            <div class="text-center">
+                <div class="bg-indigo-600 text-white rounded-full w-16 h-16 flex items-center justify-center text-2xl font-bold mx-auto mb-4">4</div>
+                <h3 class="text-xl font-bold text-gray-800 mb-2">Lihat Laporan</h3>
+                <p class="text-gray-600">Analisis keuangan Anda dengan laporan yang detail</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="bg-indigo-600 text-white py-20">
+    <div class="container mx-auto px-4 text-center">
+        <h2 class="text-4xl font-bold mb-4">Siap Mengelola Keuangan Anda?</h2>
+        <p class="text-xl mb-8 opacity-90">
+            Bergabunglah dengan ribuan pengguna yang telah mempercayai Cash Flow Management
+        </p>
+        <a href="/auth/register" class="inline-block px-8 py-4 bg-white text-indigo-600 rounded-lg font-bold text-lg hover:bg-gray-100 transition">
+            Daftar Gratis Sekarang
+        </a>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-800 text-gray-400 py-12">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div>
+                <h3 class="text-white font-semibold mb-4">Cash Flow Management</h3>
+                <p class="text-sm">Platform manajemen keuangan pribadi yang mudah digunakan dan aman.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Menu</h4>
+                <ul class="space-y-2 text-sm">
+                    <li><a href="#features" class="hover:text-white transition">Fitur</a></li>
+                    <li><a href="#" class="hover:text-white transition">Tentang</a></li>
+                    <li><a href="#" class="hover:text-white transition">Kebijakan Privasi</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Kontak</h4>
+                <ul class="space-y-2 text-sm">
+                    <li>Email: info@cashflow.local</li>
+                    <li>© 2026 Cash Flow Management</li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-700 pt-8 text-center text-sm">
+            <p>&copy; 2026 Cash Flow Management. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<%- include('layout/footer') %>

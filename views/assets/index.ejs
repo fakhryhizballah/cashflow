@@ -1,0 +1,135 @@
+<%- include('layout/header', { title: 'Aset' }) %>
+<%- include('layout/navbar') %>
+
+<!-- Main Content -->
+<div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row items-center justify-between mb-8">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-800">Manajemen Aset</h1>
+            <p class="text-gray-600">Kelola aset keuangan Anda</p>
+        </div>
+        <a href="/assets/create" class="mt-4 md:mt-0 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
+            <i class="fas fa-plus mr-2"></i>Aset Baru
+        </a>
+    </div>
+
+    <!-- Assets Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% if (typeof assets !== 'undefined' && assets && assets.length > 0) { %>
+            <% assets.forEach(asset => { %>
+                <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
+                    <!-- Card Header -->
+                    <div class="bg-gradient-to-r from-indigo-500 to-indigo-600 px-6 py-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-lg font-bold text-white"><%= asset.nama_aset %></h3>
+                            <div class="text-white text-3xl opacity-30">
+                                <% if (asset.tipe_aset === 'bank') { %>
+                                    <i class="fas fa-university"></i>
+                                <% } else if (asset.tipe_aset === 'kartu_debit') { %>
+                                    <i class="fas fa-credit-card"></i>
+                                <% } else if (asset.tipe_aset === 'kartu_kredit') { %>
+                                    <i class="fas fa-credit-card"></i>
+                                <% } else if (asset.tipe_aset === 'dompet') { %>
+                                    <i class="fas fa-wallet"></i>
+                                <% } else if (asset.tipe_aset === 'investasi') { %>
+                                    <i class="fas fa-chart-line"></i>
+                                <% } else { %>
+                                    <i class="fas fa-piggy-bank"></i>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="px-6 py-4">
+                        <!-- Tipe Aset -->
+                        <div class="mb-4">
+                            <p class="text-xs text-gray-500 uppercase font-medium mb-1">Tipe Aset</p>
+                            <p class="text-sm text-gray-700 capitalize">
+                                <%= asset.tipe_aset.replace(/_/g, ' ') %>
+                            </p>
+                        </div>
+
+                        <!-- Saldo -->
+                        <div class="mb-4">
+                            <p class="text-xs text-gray-500 uppercase font-medium mb-1">Saldo</p>
+                            <p class="text-2xl font-bold text-indigo-600">
+                                <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(asset.saldo) %>
+                            </p>
+                        </div>
+
+                        <!-- Mata Uang -->
+                        <div class="mb-6">
+                            <p class="text-xs text-gray-500 uppercase font-medium mb-1">Mata Uang</p>
+                            <p class="text-sm text-gray-700"><%= asset.mata_uang %></p>
+                        </div>
+
+                        <!-- Created Date -->
+                        <p class="text-xs text-gray-400 mb-4">
+                            Dibuat: <%= new Date(asset.createdAt).toLocaleDateString('id-ID') %>
+                        </p>
+
+                        <!-- Actions -->
+                        <div class="flex space-x-2 pt-4 border-t">
+                            <a href="/assets/<%= asset.id %>/edit" class="flex-1 px-3 py-2 bg-amber-100 hover:bg-amber-200 text-amber-700 rounded-lg text-center font-medium transition text-sm">
+                                <i class="fas fa-edit mr-1"></i>Edit
+                            </a>
+                            <button onclick="deleteAsset(<%= asset.id %>, '<%= asset.nama_aset %>')" class="flex-1 px-3 py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-lg font-medium transition text-sm">
+                                <i class="fas fa-trash mr-1"></i>Hapus
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        <% } else { %>
+            <div class="col-span-full">
+                <div class="bg-white rounded-lg shadow p-12 text-center">
+                    <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
+                    <p class="text-gray-500 text-lg mb-4">Belum ada aset</p>
+                    <a href="/assets/create" class="inline-block px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
+                        <i class="fas fa-plus mr-2"></i>Buat Aset Pertama Anda
+                    </a>
+                </div>
+            </div>
+        <% } %>
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="bg-gradient-to-r from-red-500 to-red-600 px-6 py-4">
+            <h2 class="text-xl font-bold text-white">Hapus Aset</h2>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-700 mb-6">
+                Apakah Anda yakin ingin menghapus aset <span id="assetName" class="font-semibold"></span>? Tindakan ini tidak dapat dibatalkan.
+            </p>
+            <div class="flex justify-end space-x-3">
+                <button onclick="closeDeleteModal()" class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300">
+                    Batal
+                </button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg">
+                        Hapus
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function deleteAsset(id, name) {
+        document.getElementById('assetName').textContent = name;
+        document.getElementById('deleteForm').action = '/assets/' + id + '/delete';
+        document.getElementById('deleteModal').classList.remove('hidden');
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.add('hidden');
+    }
+</script>
+
+<%- include('layout/footer') %>
