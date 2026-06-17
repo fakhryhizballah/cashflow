@@ -6,11 +6,6 @@ class AuthController {
   static async register(req, res, next) {
     try {
       const { username, email, password, confirmPassword } = req.body;
-
-      if (password !== confirmPassword) {
-        return res.status(400).json({ error: 'Password tidak cocok' });
-      }
-
       const result = await AuthService.register(username, email, password);
       res.status(201).json(result);
     } catch (error) {
@@ -22,6 +17,7 @@ class AuthController {
     try {
       const { email, password } = req.body;
       const result = await AuthService.login(email, password);
+      res.cookie('x-access-token', result.token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 });
       res.status(200).json(result);
     } catch (error) {
       next(error);

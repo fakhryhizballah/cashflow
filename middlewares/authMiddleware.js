@@ -1,8 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
-  const token = req.header('Authorization')?.replace('Bearer ', '');
-
+  const token = req.cookies['x-access-token'];
   if (!token) {
     return res.status(401).json({ error: 'Token tidak ditemukan. Silakan login terlebih dahulu.' });
   }
@@ -16,7 +15,8 @@ const authMiddleware = (req, res, next) => {
     if (error.name === 'TokenExpiredError') {
       return res.status(401).json({ error: 'Token telah kadaluarsa. Silakan login kembali.' });
     }
-    return res.status(403).json({ error: 'Token tidak valid' });
+    res.clearCookie('x-access-token');
+    return res.redirect('/login');
   }
 };
 

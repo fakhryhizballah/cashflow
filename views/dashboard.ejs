@@ -16,8 +16,8 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-600 text-sm font-medium">Total Aset</p>
-                    <p class="text-3xl font-bold text-gray-800 mt-2">
-                        <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(stats.totalAssets || 0) %>
+                    <p class="text-3xl font-bold text-gray-800 mt-2" id="totalAssets">
+                     -
                     </p>
                 </div>
                 <div class="text-indigo-600 text-4xl opacity-20">
@@ -31,8 +31,8 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-600 text-sm font-medium">Pemasukan Bulan Ini</p>
-                    <p class="text-3xl font-bold text-green-600 mt-2">
-                        <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(stats.monthlyIncome || 0) %>
+                    <p class="text-3xl font-bold text-green-600 mt-2" id="thisMonthIncome">
+                      -
                     </p>
                 </div>
                 <div class="text-green-500 text-4xl opacity-20">
@@ -46,8 +46,8 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-600 text-sm font-medium">Pengeluaran Bulan Ini</p>
-                    <p class="text-3xl font-bold text-red-600 mt-2">
-                        <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(stats.monthlyExpense || 0) %>
+                    <p class="text-3xl font-bold text-red-600 mt-2" id="thisMonthExpense">
+                        -
                     </p>
                 </div>
                 <div class="text-red-500 text-4xl opacity-20">
@@ -61,8 +61,8 @@
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-gray-600 text-sm font-medium">Saldo Bersih</p>
-                    <p class="text-3xl font-bold text-amber-600 mt-2">
-                        <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format((stats.monthlyIncome || 0) - (stats.monthlyExpense || 0)) %>
+                    <p class="text-3xl font-bold text-amber-600 mt-2" id="netBalance">
+                        -
                     </p>
                 </div>
                 <div class="text-amber-500 text-4xl opacity-20">
@@ -84,27 +84,8 @@
                     </a>
                 </div>
 
-                <div class="space-y-3">
-                    <% if (typeof assets !== 'undefined' && assets && assets.length > 0) { %>
-                        <% assets.slice(0, 5).forEach(asset => { %>
-                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                                <div class="flex items-center space-x-3">
-                                    <div class="w-10 h-10 bg-indigo-100 rounded-lg flex items-center justify-center">
-                                        <i class="fas fa-university text-indigo-600"></i>
-                                    </div>
-                                    <div>
-                                        <p class="font-medium text-gray-800"><%= asset.nama_aset %></p>
-                                        <p class="text-xs text-gray-500"><%= asset.tipe_aset %></p>
-                                    </div>
-                                </div>
-                                <p class="font-semibold text-gray-800">
-                                    <%= new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(asset.saldo) %>
-                                </p>
-                            </div>
-                        <% }); %>
-                    <% } else { %>
-                        <p class="text-gray-500 text-center py-8">Belum ada aset. <a href="/assets" class="text-indigo-600 hover:text-indigo-700">Buat aset baru</a></p>
-                    <% } %>
+                <div class="space-y-3" id="assetsSummary">
+                    <!-- Assets will be dynamically loaded here -->
                 </div>
             </div>
         </div>

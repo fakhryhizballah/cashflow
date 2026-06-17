@@ -50,8 +50,7 @@ async function apiGet(endpoint) {
         const response = await fetch(endpoint, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Content-Type': 'application/json'
             }
         });
         
@@ -72,17 +71,12 @@ async function apiPost(endpoint, data) {
         const response = await fetch(endpoint, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        return await response.json();
+
+        return response;
     } catch (error) {
         console.error('API Error:', error);
         throw error;
@@ -95,8 +89,7 @@ async function apiPut(endpoint, data) {
         const response = await fetch(endpoint, {
             method: 'PUT',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         });
@@ -118,8 +111,7 @@ async function apiDelete(endpoint) {
         const response = await fetch(endpoint, {
             method: 'DELETE',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'Content-Type': 'application/json'
             }
         });
         

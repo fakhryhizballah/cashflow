@@ -9,8 +9,6 @@ class AuthService {
         email,
         password,
       });
-
-      const token = generateToken(user);
       return {
         success: true,
         message: 'Registrasi berhasil',
@@ -18,8 +16,7 @@ class AuthService {
           id: user.id,
           username: user.username,
           email: user.email,
-        },
-        token,
+        }
       };
     } catch (error) {
       throw error;

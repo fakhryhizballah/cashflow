@@ -1,5 +1,5 @@
-<%- include('layout/header', { title: 'Aset' }) %>
-<%- include('layout/navbar') %>
+<%- include('../layout/header', { title: 'Aset' }) %>
+<%- include('../layout/navbar') %>
 
 <!-- Main Content -->
 <div class="container mx-auto px-4 py-8">
@@ -9,13 +9,13 @@
             <h1 class="text-4xl font-bold text-gray-800">Manajemen Aset</h1>
             <p class="text-gray-600">Kelola aset keuangan Anda</p>
         </div>
-        <a href="/assets/create" class="mt-4 md:mt-0 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
+        <a href="/assets/form" class="mt-4 md:mt-0 px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium transition">
             <i class="fas fa-plus mr-2"></i>Aset Baru
         </a>
     </div>
 
     <!-- Assets Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="assetsGrid">
         <% if (typeof assets !== 'undefined' && assets && assets.length > 0) { %>
             <% assets.forEach(asset => { %>
                 <div class="bg-white rounded-lg shadow hover:shadow-lg transition">
@@ -87,7 +87,7 @@
                 <div class="bg-white rounded-lg shadow p-12 text-center">
                     <i class="fas fa-inbox text-6xl text-gray-300 mb-4"></i>
                     <p class="text-gray-500 text-lg mb-4">Belum ada aset</p>
-                    <a href="/assets/create" class="inline-block px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
+                    <a href="/assets/form" class="inline-block px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg font-medium">
                         <i class="fas fa-plus mr-2"></i>Buat Aset Pertama Anda
                     </a>
                 </div>
@@ -120,16 +120,4 @@
     </div>
 </div>
 
-<script>
-    function deleteAsset(id, name) {
-        document.getElementById('assetName').textContent = name;
-        document.getElementById('deleteForm').action = '/assets/' + id + '/delete';
-        document.getElementById('deleteModal').classList.remove('hidden');
-    }
-
-    function closeDeleteModal() {
-        document.getElementById('deleteModal').classList.add('hidden');
-    }
-</script>
-
-<%- include('layout/footer') %>
+<%- include('../layout/footer') %>
